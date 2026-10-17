@@ -8,8 +8,8 @@
 | Ветка разработки | DONE | feat/site-reconstruction-foundation |
 | План и документация | DONE | SPEC, ROADMAP, RESEARCH, PROGRESS, TEST-PLAN |
 | Анализ публичного текста | PARTIAL | Основные секции, поля и квиз подтверждены |
-| Playwright inventory script | DONE | Скрипт добавлен, результаты реального запуска пока не получены |
-| Reference capture CI | PARTIAL | Добавлен ручной GitHub Actions workflow с выгрузкой снимков; запуск ещё не выполнялся |
+| Playwright inventory script | DONE | Скрипт расширен: 4 viewport, геометрия, стили, отдельные снимки секций; реальный запуск ещё не подтверждён |
+| Reference capture CI | PARTIAL | Ручной GitHub Actions workflow сохраняет скриншоты и JSON; запуск не подтверждён |
 | REA-анализ | TODO | Инструкция подготовлена, сеанс не запускался |
 | React + Vite проект | DONE | Структура и файлы первого прототипа |
 | Первый экран, меню, карточки | PARTIAL | Оригинальный дизайн-прототип, не пиксельная реконструкция |
