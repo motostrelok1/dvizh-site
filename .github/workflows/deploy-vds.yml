@@ -1,0 +1,64 @@
+name: Deploy site to VDS
+on:
+  workflow_dispatch:
+    inputs:
+      release_approved:
+        description: 'Type APPROVED only after visual and functional sign-off'
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: dvizh-site-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: ${{ inputs.release_approved == 'APPROVED' }}
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Verify
+        run: |
+          npm run check
+          npm test
+          npm run build
+      - name: Configure pinned SSH
+        env:
+          DEPLOY_KEY: ${{ secrets.VDS_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.VDS_KNOWN_HOSTS }}
+          DEPLOY_USER: ${{ secrets.VDS_SSH_USER }}
+        run: |
+          set -euo pipefail
+          : "${DEPLOY_KEY:?Missing VDS_SSH_KEY secret}"
+          : "${KNOWN_HOSTS:?Missing VDS_KNOWN_HOSTS secret}"
+          : "${DEPLOY_USER:?Missing VDS_SSH_USER secret}"
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -F 135.106.194.118 -f ~/.ssh/known_hosts >/dev/null
+      - name: Upload immutable release and switch
+        env:
+          DEPLOY_USER: ${{ secrets.VDS_SSH_USER }}
+          RELEASE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          HOST="135.106.194.118"
+          SSH_ARGS="-o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=12"
+          ssh $SSH_ARGS "${DEPLOY_USER}@${HOST}" "test -d /var/www/dvizh-site/releases && test -w /var/www/dvizh-site/releases"
+          ssh $SSH_ARGS "${DEPLOY_USER}@${HOST}" "mkdir -p /var/www/dvizh-site/releases/${RELEASE}"
+          rsync -az --delete -e "ssh $SSH_ARGS" dist/ "${DEPLOY_USER}@${HOST}:/var/www/dvizh-site/releases/${RELEASE}/"
+          ssh $SSH_ARGS "${DEPLOY_USER}@${HOST}" "set -eu; cd /var/www/dvizh-site; test -f releases/${RELEASE}/index.html; ln -sfn releases/${RELEASE} current.next; mv -Tf current.next current"
+      - name: HTTPS smoke check
+        run: |
+          set -euo pipefail
+          curl --fail --show-error --silent --location --retry 3 --retry-delay 4 --max-time 20 https://site.dvizh-school.ru/ > /tmp/site-index.html
+          grep -q '<div id="root"></div>' /tmp/site-index.html
