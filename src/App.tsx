@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDialogKeyboard } from './useDialogKeyboard';
-import { ArrowRight, ArrowLeft, ArrowUpRight, Check, CarFront, Menu, X, Clock3, GraduationCap, ShieldCheck, CreditCard, ChevronDown } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ArrowUpRight, Check, CarFront, Menu, X, Clock3, GraduationCap, ShieldCheck, CreditCard } from 'lucide-react';
 import { questions, canContinue } from './quiz';
 import ExtraQuizzes from './ExtraQuizzes';
 
