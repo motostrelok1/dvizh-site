@@ -1,6 +1,10 @@
 name: Capture reference website
 on:
   workflow_dispatch:
+  push:
+    branches: [feat/site-reconstruction-foundation]
+    paths:
+      - '.github/workflows/reference-capture.yml'
 permissions:
   contents: read
 jobs:
