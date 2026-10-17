@@ -49,6 +49,8 @@ try{
    if(!targetId) throw new Error('REA target had no ID');
    const inspected=await evidence('page.json',['inspect-web-page','http://127.0.0.1:9222',String(targetId),'--json']);
    if(!inspected.ok) throw new Error('REA page inspection failed: '+inspected.error);
+   const bundle=await evidence('bundle.json',['analyze-web-bundle','http://127.0.0.1:9222',String(targetId),'--json']);
+   if(!bundle.ok) throw new Error('REA bundle analysis failed: '+bundle.error);
   }
  }
 }finally{
