@@ -5,6 +5,7 @@ on:
     branches: [feat/site-reconstruction-foundation]
     paths:
       - '.github/workflows/rea-capture.yml'
+      - 'research/rea-inspect.mjs'
 permissions:
   contents: read
 jobs:
