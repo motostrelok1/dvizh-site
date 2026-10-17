@@ -21,6 +21,14 @@ User decision, 2026-10-17: deploy to VDS **after** an accurate, functionally tes
 - [ ] Production build and smoke tests succeed
 - [ ] Verify DNS points to `135.106.194.118`; confirm VDS distribution, existing services, deployment root and SSH access
 
+## Automation prepared
+
+- Manual deployment workflow: `.github/workflows/deploy-vds.yml` (requires `APPROVED` input, GitHub `production` environment and dedicated SSH secrets).
+- Nginx HTTP template: `deploy/nginx-site.dvizh-school.ru.conf`.
+- Server prerequisites and rollback: `deploy/README.md`.
+- **NOT ACTIVE:** no SSH credentials or access, server TLS/Nginx unknown, DNS not publicly verified and reference-site fidelity gates not met.
+- External checks (2026-10-17): domain resolution unsuccessful from execution environment and TCP/80 to `135.106.194.118` unsuccessful. These are inconclusive for global DNS/server health.
+
 ## Proposed static deployment (after gates)
 
 1. Build using a pinned Node version and lockfile: `npm ci && npm run build`.
