@@ -61,3 +61,11 @@ test('gift certificate call to action opens the main quiz', async ({page})=>{
  await page.keyboard.press('Escape');
  await expect(page.getByRole('dialog')).toHaveCount(0);
 });
+
+test('privacy page explains that demo data is not submitted', async ({page})=>{
+ await page.goto('/privacy');
+ await expect(page.getByRole('heading',{name:'Обработка данных в демонстрационной версии'})).toBeVisible();
+ await expect(page.getByText(/не отправляются в CRM/)).toBeVisible();
+ await page.getByRole('link',{name:/Вернуться на главную/}).click();
+ await expect(page.locator('h1')).toContainText('АВТОШКОЛА В ВОЛОГДЕ');
+});
