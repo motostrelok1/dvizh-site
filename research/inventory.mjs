@@ -33,7 +33,7 @@ try {
       tag:element.tagName.toLowerCase(),
       id:element.id||null,
       classes:String(element.className||'').slice(0,180),
-      text:(element.textContent||'').trim().replace(/\\s+/g,' ').slice(0,140),
+      text:(element.textContent||'').trim().replace(/\s+/g,' ').slice(0,140),
       bounds:{x:Math.round(rect.x),y:Math.round(rect.y+scrollY),width:Math.round(rect.width),height:Math.round(rect.height)},
       style:{fontFamily:computed.fontFamily,fontSize:computed.fontSize,fontWeight:computed.fontWeight,lineHeight:computed.lineHeight,color:computed.color,backgroundColor:computed.backgroundColor,borderRadius:computed.borderRadius}
      };
