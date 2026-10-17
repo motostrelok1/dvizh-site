@@ -29,8 +29,9 @@ async function evidence(name,args) {
 }
 try{
  await new Promise(resolve=>setTimeout(resolve,5000));
- const result=await evidence('targets.json',['list-browser-targets','http://127.0.0.1:9222','--approved','--json']);
+ const result=await evidence('targets.json',['list-browser-targets','http://127.0.0.1:9222','--json']);
  // Target selection is explicit only when discoverable from the actual REA response.
+ if(!result.ok) throw new Error('REA target discovery failed: '+result.error);
  if(result.ok){
   let target=null;
   try {
@@ -43,7 +44,7 @@ try{
   }catch{}
   if(target){
    const targetId=target.target_id||target.targetId||target.id;
-   if(targetId) await evidence('page.json',['inspect-web-page','http://127.0.0.1:9222',String(targetId),'--approved','--json']);
+   if(targetId) await evidence('page.json',['inspect-web-page','http://127.0.0.1:9222',String(targetId),'--json']);
   }
  }
 }finally{
