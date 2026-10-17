@@ -21,3 +21,5 @@
 
 /* Reference headline has a narrow heavy display face; use a cross-platform downloaded equivalent. */
 .ref-hero-card h1,.ref-hero-bottom h2{font-family:'Anton',Impact,'Arial Narrow',sans-serif;font-weight:400;letter-spacing:.005em}
+
+.privacy-page{background:#f5f5f9;min-height:100vh;padding:70px 0}.privacy-shell{background:#fff;border-radius:28px;padding:clamp(25px,5vw,75px);max-width:900px}.privacy-shell h1{font-size:clamp(34px,4vw,58px);letter-spacing:-.06em;line-height:1.1;margin:30px 0}.privacy-shell h2{font-size:23px;letter-spacing:-.03em;margin:25px 0 10px}.privacy-shell p{font-size:15px;line-height:1.8;color:#46504b}.privacy-back{display:inline-flex;align-items:center;gap:10px;font-weight:700;color:#ff003d;margin-bottom:30px}.privacy-note{border-top:1px solid #e8e8e8;padding-top:25px;color:#667!important}.ref-consent a{color:#ef0043;text-decoration:underline;text-underline-offset:2px}
