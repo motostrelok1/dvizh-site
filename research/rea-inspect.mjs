@@ -39,12 +39,16 @@ try{
    const candidates=Array.isArray(data)?data:
      Array.isArray(data.targets)?data.targets:
      Array.isArray(data.data?.targets)?data.data.targets:
-     Array.isArray(data.result?.targets)?data.result.targets:[];
+     Array.isArray(data.result?.targets)?data.result.targets:
+     Array.isArray(data.normalized_result?.targets)?data.normalized_result.targets:[];
    target=candidates.find(x=>String(x.url||x.target_url||'').startsWith(url));
   }catch{}
+  if(!target) throw new Error('REA found no approved source-origin target');
   if(target){
    const targetId=target.target_id||target.targetId||target.id;
-   if(targetId) await evidence('page.json',['inspect-web-page','http://127.0.0.1:9222',String(targetId),'--json']);
+   if(!targetId) throw new Error('REA target had no ID');
+   const inspected=await evidence('page.json',['inspect-web-page','http://127.0.0.1:9222',String(targetId),'--json']);
+   if(!inspected.ok) throw new Error('REA page inspection failed: '+inspected.error);
   }
  }
 }finally{
