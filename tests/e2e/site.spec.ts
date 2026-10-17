@@ -41,3 +41,23 @@ test('each additional quiz completes without collecting personal data', async ({
   await expect(dialog).toHaveCount(0);
  }
 });
+
+test('training and gift certificate are visible at multiple viewport sizes', async ({page})=>{
+ for (const width of [390,768,1440]) {
+  await page.setViewportSize({width,height:900});
+  await page.goto('/');
+  await expect(page.locator('#training')).toBeVisible();
+  await expect(page.locator('#training').getByRole('heading',{name:'Теория ПДД'})).toBeVisible();
+  await expect(page.locator('#gift')).toBeVisible();
+  await expect(page.locator('#gift').getByRole('heading',{name:/Подарите/})).toBeVisible();
+  await expect(page.locator('#gift').getByRole('button',{name:/Узнать о программе/})).toBeVisible();
+ }
+});
+test('gift certificate call to action opens the main quiz', async ({page})=>{
+ await page.goto('/');
+ await page.locator('#gift').getByRole('button',{name:/Узнать о программе/}).click();
+ await expect(page.getByRole('dialog')).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Как вам удобно было бы проходить курс теории?'})).toBeVisible();
+ await page.keyboard.press('Escape');
+ await expect(page.getByRole('dialog')).toHaveCount(0);
+});
