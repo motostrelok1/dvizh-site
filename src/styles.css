@@ -17,3 +17,7 @@
 /* Source mobile: headline + media inside a single white rounded hero card. */
 .ref-mobile-photo{display:none}
 @media(max-width:730px){.header-inner{justify-content:space-between}.nav{display:none}.header-cta{display:inline-flex!important;background:#ff003d;color:#fff;font-size:12px;padding:12px 15px;gap:4px}.header-cta svg{display:none}.menu-button{display:none!important}.brand{font-size:13px}.brand-mark{width:35px;height:35px;font-size:25px}.brand small{font-size:7px}.ref-hero-card{border-radius:30px}.ref-mobile-photo{display:flex;flex-direction:column;justify-content:space-between;align-items:start;border-radius:28px;background:linear-gradient(140deg,#505c66,#a1aeb9);color:white;min-height:330px;padding:20px;margin:2px 0 24px}.ref-mobile-photo svg{align-self:center;margin:auto;opacity:.5}.ref-mobile-photo span{border-radius:30px;background:#d7ff48;color:#1f292c;padding:9px 13px;font-weight:700;font-size:11px}.ref-hero-visual{display:none}.ref-hero-card h2{font-size:20px}.ref-hero-card ul{font-size:16px}.ref-hero-card h1{margin-top:0}.ref-primary{font-size:15px;min-height:58px}}
+
+/* Reference headline has a narrow heavy display face; use a cross-platform downloaded equivalent. */
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+.ref-hero-card h1,.ref-hero-bottom h2{font-family:'Anton',Impact,'Arial Narrow',sans-serif;font-weight:400;letter-spacing:.005em}
