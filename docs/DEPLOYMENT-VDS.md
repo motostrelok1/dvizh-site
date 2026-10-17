@@ -2,6 +2,13 @@
 
 User decision, 2026-10-17: deploy to VDS **after** an accurate, functionally tested reproduction is ready. Do not deploy the current demo.
 
+## Target environment
+
+- Production URL: `https://site.dvizh-school.ru`
+- DNS record provided by owner: `site.dvizh-school.ru. IN A 135.106.194.118` (TTL `3600` seconds)
+- DNS propagation, actual server ownership, listening ports, firewall, and HTTP reachability: **not yet verified**
+- Do not redirect other hostnames or alter other virtual hosts on the VDS.
+
 ## Release gates
 
 - [ ] All public source pages and UI states catalogued and reproducible
@@ -12,7 +19,7 @@ User decision, 2026-10-17: deploy to VDS **after** an accurate, functionally tes
 - [ ] Rights/authorization established for any copied protected assets, brand or content
 - [ ] Data collection policy, consent and spam controls in place before connecting CRM
 - [ ] Production build and smoke tests succeed
-- [ ] Confirm target hostname and VDS distribution, existing services, deployment root and SSH access
+- [ ] Verify DNS points to `135.106.194.118`; confirm VDS distribution, existing services, deployment root and SSH access
 
 ## Proposed static deployment (after gates)
 
