@@ -24,3 +24,20 @@ test('dialogs support Escape and return focus to trigger', async ({page})=>{
  await page.keyboard.press('Escape');
  await expect(page.getByRole('dialog')).toHaveCount(0);
 });
+
+test('each additional quiz completes without collecting personal data', async ({page})=>{
+ await page.goto('/');
+ for(const index of [0,1,2]){
+  await page.locator('#tests').getByRole('button',{name:/Пройти тест/}).nth(index).click();
+  const dialog=page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  for(let step=0;step<[4,6,6][index];step++){
+   await dialog.locator('.answer').first().click();
+   await dialog.getByRole('button',{name:step===[4,6,6][index]-1?'Результат':'Далее'}).click();
+  }
+  await expect(dialog.getByRole('heading',{name:'Вы прошли тест'})).toBeVisible();
+  await expect(dialog.locator('input[type="tel"],input[type="email"]')).toHaveCount(0);
+  await dialog.getByRole('button',{name:'Закрыть'}).last().click();
+  await expect(dialog).toHaveCount(0);
+ }
+});
