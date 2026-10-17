@@ -9,3 +9,18 @@ test('source coverage: public sections and responsive layout',async ({page})=>{
   expect(overflow, 'horizontal overflow at '+width).toBe(false);
  }
 });
+
+test('dialogs support Escape and return focus to trigger', async ({page})=>{
+ await page.goto('/');
+ const trigger=page.getByRole('button',{name:/Подобрать обучение/});
+ await trigger.focus();await trigger.click();
+ await expect(page.getByRole('dialog')).toBeVisible();
+ await expect(page.locator('body')).toHaveCSS('overflow','hidden');
+ await page.keyboard.press('Escape');
+ await expect(page.getByRole('dialog')).toHaveCount(0);
+ await expect(trigger).toBeFocused();
+ await page.locator('#tests').getByRole('button',{name:/Пройти тест/}).first().click();
+ await expect(page.getByRole('dialog')).toBeVisible();
+ await page.keyboard.press('Escape');
+ await expect(page.getByRole('dialog')).toHaveCount(0);
+});
