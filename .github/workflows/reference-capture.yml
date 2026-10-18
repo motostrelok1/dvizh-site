@@ -1,0 +1,32 @@
+name: Capture reference website
+on:
+  workflow_dispatch:
+  push:
+    branches: [feat/site-reconstruction-foundation]
+    paths:
+      - '.github/workflows/reference-capture.yml'
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Capture public reference pages (read only)
+        run: npm run research:inventory
+      - name: Publish reference research artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference-inventory
+          path: research/output/
+          if-no-files-found: warn
+          retention-days: 7

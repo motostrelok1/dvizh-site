@@ -1,0 +1,37 @@
+name: REA browser inspection
+on:
+  workflow_dispatch:
+  push:
+    branches: [feat/site-reconstruction-foundation]
+    paths:
+      - '.github/workflows/rea-capture.yml'
+      - 'research/rea-inspect.mjs'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser tooling
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Inspect public site using REA and isolated CDP browser
+        env:
+          REA_BROWSER_OBSERVE_ENABLED: 'true'
+          REA_BROWSER_CDP_ENDPOINTS_JSON: '["http://127.0.0.1:9222"]'
+          REA_BROWSER_ALLOWED_ORIGINS_JSON: '["https://xn-----6kcbablcjk5dhfd3bbeb0ep8fwag6n.xn--p1ai"]'
+        run: node research/rea-inspect.mjs
+      - name: Upload bounded REA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-browser-evidence
+          path: research/rea-output/
+          retention-days: 7
+          if-no-files-found: warn

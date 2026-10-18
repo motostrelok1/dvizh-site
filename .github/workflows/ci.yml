@@ -1,0 +1,48 @@
+name: Verify site
+on:
+  push:
+    branches: [main, feat/site-reconstruction-foundation]
+  pull_request:
+    branches: [main]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Audit dependency vulnerabilities
+        run: npm audit --audit-level=high --omit=dev
+      - name: Typecheck
+        run: npm run check
+      - name: Unit tests
+        run: npm test
+      - name: Production build
+        run: npm run build
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+      - name: End-to-end test
+        run: npm run test:e2e
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+
+      - name: Upload own-site reference screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: own-site-screenshots
+          path: test-results/visual-reference/
+          if-no-files-found: ignore
+          retention-days: 7
